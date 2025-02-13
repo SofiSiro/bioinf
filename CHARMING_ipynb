@@ -1,0 +1,293 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/SofiSiro/bioinf/blob/main/CHARMING_ipynb\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# CHARMING installation\n",
+        "https://github.com/wrightgs/CHARMING"
+      ],
+      "metadata": {
+        "id": "_Bb3dP9ohCB_"
+      }
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "9gbKemfSDyNV",
+        "outputId": "3e516b99-0bd4-46af-d631-163711e58950"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Cloning into 'CHARMING'...\n",
+            "remote: Enumerating objects: 29, done.\u001b[K\n",
+            "remote: Counting objects: 100% (29/29), done.\u001b[K\n",
+            "remote: Compressing objects: 100% (28/28), done.\u001b[K\n",
+            "remote: Total 29 (delta 10), reused 0 (delta 0), pack-reused 0 (from 0)\u001b[K\n",
+            "Receiving objects: 100% (29/29), 15.20 KiB | 1.90 MiB/s, done.\n",
+            "Resolving deltas: 100% (10/10), done.\n"
+          ]
+        }
+      ],
+      "source": [
+        "!git clone https://github.com/wrightgs/CHARMING.git"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "#Table and Seq input\n",
+        "\n",
+        "Just copy Codon Usage table from CoCoPUTs and seq which you want to harmonize"
+      ],
+      "metadata": {
+        "id": "LmtLlMxRhnmW"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        " #run the cell to execute function for table parsing\n",
+        "\n",
+        "import re\n",
+        "import pandas as pd\n",
+        "\n",
+        "def table_parse_save_to_file(organism, input_table):\n",
+        "\n",
+        "    #parse of CoCoPUTs table\n",
+        "    pattern_codon = re.compile(r'\\b[a-zA-Z]{3}\\b')\n",
+        "    pattern_freq = re.compile(r'\\b\\d+\\.\\d{2}\\b')\n",
+        "    codon = re.findall(pattern_codon, input_table)\n",
+        "    freq = re.findall(pattern_freq, input_table)\n",
+        "\n",
+        "    input_table = pd.DataFrame({\n",
+        "        'codon': codon,\n",
+        "        'freq': freq,\n",
+        "    })\n",
+        "\n",
+        "    return input_table.to_csv(f'{organism}.txt', sep = '\\t', index = False, header = False)"
+      ],
+      "metadata": {
+        "id": "fmGmdsnPicuu"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#parse cocoputs table and save it in ./content folder with the name which you gave\n",
+        "\n",
+        "print('put name of organism, copy and paste table for origin organism')\n",
+        "origin_organism, origin_org_table = str(input()), str(input())\n",
+        "#table parsing\n",
+        "table_parse_save_to_file(origin_organism, origin_org_table)\n",
+        "\n",
+        "print('put name of organism, copy and paste table for expression organism')\n",
+        "expression_organism, expression_org_table = str(input()), str(input())\n",
+        "#table parsing\n",
+        "table_parse_save_to_file(expression_organism, expression_org_table)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "OJomLCchhmPv",
+        "outputId": "6b1aa7e7-9e9c-4f31-d4cc-ff9500964e61"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "put name of organism, copy and paste table for origin organism\n",
+            "furiosus\n",
+            " TTT \t25.77 \t(43558) \tTCT \t 9.00 \t(15204) \tTAT \t21.36 \t(36100) \tTGT \t 3.62 \t( 6110) TTC \t18.05 \t(30509) \tTCC \t 6.09 \t(10299) \tTAC \t18.35 \t(31005) \tTGC \t 2.18 \t( 3689) TTA \t19.49 \t(32941) \tTCA \t10.05 \t(16987) \tTAA \t 1.16 \t( 1958) \tTGA \t 1.65 \t( 2782) TTG \t13.92 \t(23520) \tTCG \t 2.46 \t( 4158) \tTAG \t 0.72 \t( 1214) \tTGG \t12.20 \t(20620)   \t  \t  \t  \t  \t  \t  \t  \t  \t  \t  \t  CTT \t24.22 \t(40937) \tCCT \t10.57 \t(17867) \tCAT \t 7.02 \t(11871) \tCGT \t 1.12 \t( 1889) CTC \t16.82 \t(28426) \tCCC \t 9.16 \t(15477) \tCAC \t 8.00 \t(13518) \tCGC \t 1.08 \t( 1827) CTA \t17.75 \t(29990) \tCCA \t19.93 \t(33677) \tCAA \t 9.42 \t(15921) \tCGA \t 1.18 \t( 1989) CTG \t 8.20 \t(13853) \tCCG \t 2.99 \t( 5051) \tCAG \t 7.86 \t(13282) \tCGG \t 0.72 \t( 1212)   \t  \t  \t  \t  \t  \t  \t  \t  \t  \t  \t  ATT \t32.71 \t(55278) \tACT \t14.82 \t(25052) \tAAT \t17.68 \t(29878) \tAGT \t10.16 \t(17172) ATC \t13.53 \t(22868) \tACC \t 7.50 \t(12680) \tAAC \t16.71 \t(28236) \tAGC \t10.72 \t(18110) ATA \t40.72 \t(68818) \tACA \t15.86 \t(26798) \tAAA \t38.03 \t(64276) \tAGA \t28.06 \t(47413) ATG \t21.70 \t(36672) \tACG \t 5.67 \t( 9578) \tAAG \t42.91 \t(72520) \tAGG \t21.06 \t(35594)   \t  \t  \t  \t  \t  \t  \t  \t  \t  \t  \t  GTT \t35.72 \t(60359) \tGCT \t21.35 \t(36081) \tGAT \t27.77 \t(46924) \tGGT \t12.44 \t(21025) GTC \t10.70 \t(18086) \tGCC \t13.73 \t(23195) \tGAC \t16.06 \t(27135) \tGGC \t 7.61 \t(12865) GTA \t19.29 \t(32595) \tGCA \t24.86 \t(42006) \tGAA \t48.94 \t(82707) \tGGA \t37.24 \t(62928) GTG \t13.65 \t(23067) \tGCG \t 5.94 \t(10033) \tGAG \t40.72 \t(68808) \tGGG \t14.06 \t(23753)\n",
+            "put name of organism, copy and paste table for expression organism\n",
+            "ecoli\n",
+            " TTT \t22.28 \t( 884859304) \tTCT \t 8.59 \t( 341230176) \tTAT \t16.28 \t( 646775431) \tTGT \t 5.15 \t( 204369628) TTC \t16.26 \t( 645822743) \tTCC \t 8.82 \t( 350462264) \tTAC \t12.18 \t( 483602182) \tTGC \t 6.31 \t( 250671692) TTA \t13.72 \t( 544875130) \tTCA \t 7.50 \t( 297755617) \tTAA \t 2.01 \t(  79698775) \tTGA \t 1.00 \t(  39709081) TTG \t13.33 \t( 529575852) \tTCG \t 8.79 \t( 349261974) \tTAG \t 0.23 \t(   9277733) \tTGG \t15.22 \t( 604449078)   \t  \t  \t  \t  \t  \t  \t  \t  \t  \t  \t  CTT \t11.39 \t( 452555895) \tCCT \t 7.19 \t( 285670480) \tCAT \t12.77 \t( 507363784) \tCGT \t20.72 \t( 822947687) CTC \t10.95 \t( 434982409) \tCCC \t 5.54 \t( 219881409) \tCAC \t 9.44 \t( 374998113) \tCGC \t21.55 \t( 855993095) CTA \t 3.88 \t( 154295599) \tCCA \t 8.42 \t( 334296050) \tCAA \t15.03 \t( 596935496) \tCGA \t 3.64 \t( 144705009) CTG \t52.32 \t(2078211248) \tCCG \t22.80 \t( 905697146) \tCAG \t29.26 \t(1162220193) \tCGG \t 5.68 \t( 225733345)   \t  \t  \t  \t  \t  \t  \t  \t  \t  \t  \t  ATT \t30.19 \t(1199278030) \tACT \t 8.98 \t( 356533130) \tAAT \t18.08 \t( 717967207) \tAGT \t 9.02 \t( 358422205) ATC \t24.68 \t( 980290510) \tACC \t23.00 \t( 913523340) \tAAC \t21.50 \t( 853806657) \tAGC \t15.92 \t( 632395429) ATA \t 4.72 \t( 187294284) \tACA \t 7.53 \t( 299007362) \tAAA \t33.81 \t(1342811432) \tAGA \t 2.35 \t(  93340146) ATG \t27.65 \t(1098018887) \tACG \t14.52 \t( 576519827) \tAAG \t10.67 \t( 423892201) \tAGG \t 1.40 \t(  55660373)   \t  \t  \t  \t  \t  \t  \t  \t  \t  \t  \t  GTT \t18.38 \t( 729993910) \tGCT \t15.54 \t( 617228810) \tGAT \t32.42 \t(1287642772) \tGGT \t24.54 \t( 974821805) GTC \t15.12 \t( 600554770) \tGCC \t25.62 \t(1017548717) \tGAC \t19.23 \t( 763756668) \tGGC \t28.83 \t(1145183663) GTA \t10.96 \t( 435276257) \tGCA \t20.59 \t( 817719553) \tGAA \t39.62 \t(1573751166) \tGGA \t 8.37 \t( 332414382) GTG \t25.97 \t(1031522759) \tGCG \t32.96 \t(1309274393) \tGAG \t18.29 \t( 726478043) \tGGG \t11.27 \t( 447491989)\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#put your nucleotide seq name and nuclotide seq. The file with seq will be saved in ./content with given name\n",
+        "\n",
+        "print('name of the seq, copy and paste the seq which you want to harmonize')\n",
+        "target_seq_name, target_seq = str(input()), str(input())\n",
+        "\n",
+        "if ' ' in target_seq:\n",
+        "  target_seq = target_seq.replace(' ', '').strip()\n",
+        "else:\n",
+        "  target_seq = target_seq\n",
+        "\n",
+        "with open(f\"{target_seq_name}.txt\", \"w\") as file:\n",
+        "    file.write(\">\\n\" + f\"{target_seq}\")"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "o9zi4ZT7oFV4",
+        "outputId": "97b42918-0f4f-4702-b1ad-2fe745b4edb2"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "name of the seq, copy and paste the seq which you want to harmonize\n",
+            "pura\n",
+            "ATTGTTGTTGGTGGACAGTGGGGAGATGAGGGAAAGGGTTCAATAATAGCATATCTCG CACTCCACGACGAGCCAGAGATCATAGCAAGAGGTGGCGTTGGAACAAATGCTGGGCACAGCGTGGTTAT AAACGGGAAGAAGTACGCTGTGAGGCAGTTGCCCACTGGGTTTATGCAGACCAAGGCTAGGCTTCTTGTA GGGGCTGGAGTTTTAGTTGATCCTGAGGTCTTCTTTTATGAGCTCGAGCACTTAAAGGATTTCAATGTTG CTGAGAGGGTTGGAATAGACTACAGGTGTGCAATAATCGAGCCAAAGCACAAGGAGATGGACAGAAAAAA TGACTATCTTCACGGTACCATAGGAACAACTGGAAGTGGATGTGGACCTGCCAATGCTGATAGGGTCATG AGGGTGGCAAAGCAGGCAAAAGACATTAAAGAGTTGGAGCCTTATCTTACGGATGTTGCTGCAGAGGTTA ACGATGCCCTGGATGAGGGGGCACTCGTCTTAGTTGAGGGAACCCAGGGGTTTGGCTTAAGCCTTTATTA CGGTACTTATCCCTACGTTACCTCAAAAGACACCACAGCCTCTGCAGTTGCGAGTGACGTTGGAATAGGG CCTACGAGGGTAGATGATGTGATAGTGGTCTTCAAGAGTTTCCCAACGAGGGTAGGTGCTGGTCCATTCC CCACGGAGATGCCAATGGAAGAAGCAGATAGGCTTGGATTGATCGAGTATGGAACAGTTACTGGAAGGAG GAGAAGGGTAGGATGGTTTGACTTTGAGATGGCTAGATACGCTGCTAGAATTAACGGTGCCACAATGCTC GCTGTTACAATGCTGGATAAGTACGATAAGGAAGCTTTTGGAATTACTGATTACGATAAGCTTCCCAGGA AGGCAAAGGAGTTTATTGAGGAGATTGAAGAGAGAGTTGGAGTTCCAGTAGGTTTAATAAAGACGGGTCC AGAACTGGAGCACATTATAGATTTGAGGGAGAACATCTAG\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# CHARMING Execution\n",
+        "\n",
+        "python CHARMING.py EcolTestSeq.txt 3 10 MM tutorial EcolCUB.txt ScerCUB.txt\n",
+        "\n",
+        "EcolTestSeq.txt - the seq what you harmonize\n",
+        "\n",
+        "3 - it is number of outputs\n",
+        "\n",
+        "10 - it is Window Size\n",
+        "\n",
+        "MM - MinMax% metric or you can use GM (geomteric mean)\n",
+        "\n",
+        "tutorial - it is name of seq\n",
+        "\n",
+        "EcolCUB - Codon Usage Table of origin organism\n",
+        "\n",
+        "ScerCUB - Codon Usage Table of expression organism"
+      ],
+      "metadata": {
+        "id": "kKilh450zLsa"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# python CHARMING.py EcolTestSeq.txt 3 10 MM tutorial EcolCUB.txt ScerCUB.txt\n",
+        "\n",
+        "!mkdir -p $target_seq_name\n",
+        "\n",
+        "output_file = [f'{target_seq_name}_MM_harmonized_sequences.txt',\n",
+        "               f'{target_seq_name}_MM_harmonized_values.txt',\n",
+        "               '*.png']\n",
+        "\n",
+        "!python ./CHARMING/CHARMING.py ./{target_seq_name}.txt 1 10 MM {target_seq_name} ./furiosus.txt ./ecoli.txt\n",
+        "\n",
+        "#move to folder which named as target seq. You can find there your harm.seq, values and graph\n",
+        "!mv {\" \".join(output_file)} {target_seq_name}"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "u6ZP1bwdu0PL",
+        "outputId": "7145c2b0-75b1-4641-c2b4-301e552c116b"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "\n",
+            "Harmonized mutant #1 complete\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# python CHARMING.py EcolTestSeq.txt 3 10 MM tutorial EcolCUB.txt ScerCUB.txt\n",
+        "\n",
+        "!mkdir -p $target_seq_name\n",
+        "\n",
+        "output_file = [f'{target_seq_name}_MM_harmonized_sequences.txt',\n",
+        "               f'{target_seq_name}_MM_harmonized_values.txt',\n",
+        "               '*.png']\n",
+        "\n",
+        "!python ./CHARMING/CHARMING.py ./{target_seq_name}.txt 1 10 MM {target_seq_name} ./ye.txt\n",
+        "\n",
+        "#move to folder which named as target seq. You can find there your harm.seq, values and graph\n",
+        "!mv {\" \".join(output_file)} {target_seq_name}"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "dVfmXjlaovS-",
+        "outputId": "31491bfd-66e6-481b-cf13-b49c2aa6f1a7"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "\n",
+            "ERROR: No file exists at the given path for the origin CUB table.\n",
+            "\n",
+            "The program ecountered the above error(s) when attempting to read the input arguments.\n",
+            "Please see the README file for correct input argument formats and rerun the script.\n",
+            "\n",
+            "mv: cannot stat 'pura_MM_harmonized_sequences.txt': No such file or directory\n",
+            "mv: cannot stat 'pura_MM_harmonized_values.txt': No such file or directory\n",
+            "mv: cannot stat '*.png': No such file or directory\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "metadata": {
+        "id": "g9aD7gyQqWRO"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
