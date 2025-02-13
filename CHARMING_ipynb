@@ -240,48 +240,6 @@
     },
     {
       "cell_type": "code",
-      "source": [
-        "# python CHARMING.py EcolTestSeq.txt 3 10 MM tutorial EcolCUB.txt ScerCUB.txt\n",
-        "\n",
-        "!mkdir -p $target_seq_name\n",
-        "\n",
-        "output_file = [f'{target_seq_name}_MM_harmonized_sequences.txt',\n",
-        "               f'{target_seq_name}_MM_harmonized_values.txt',\n",
-        "               '*.png']\n",
-        "\n",
-        "!python ./CHARMING/CHARMING.py ./{target_seq_name}.txt 1 10 MM {target_seq_name} ./ye.txt\n",
-        "\n",
-        "#move to folder which named as target seq. You can find there your harm.seq, values and graph\n",
-        "!mv {\" \".join(output_file)} {target_seq_name}"
-      ],
-      "metadata": {
-        "colab": {
-          "base_uri": "https://localhost:8080/"
-        },
-        "id": "dVfmXjlaovS-",
-        "outputId": "31491bfd-66e6-481b-cf13-b49c2aa6f1a7"
-      },
-      "execution_count": null,
-      "outputs": [
-        {
-          "output_type": "stream",
-          "name": "stdout",
-          "text": [
-            "\n",
-            "ERROR: No file exists at the given path for the origin CUB table.\n",
-            "\n",
-            "The program ecountered the above error(s) when attempting to read the input arguments.\n",
-            "Please see the README file for correct input argument formats and rerun the script.\n",
-            "\n",
-            "mv: cannot stat 'pura_MM_harmonized_sequences.txt': No such file or directory\n",
-            "mv: cannot stat 'pura_MM_harmonized_values.txt': No such file or directory\n",
-            "mv: cannot stat '*.png': No such file or directory\n"
-          ]
-        }
-      ]
-    },
-    {
-      "cell_type": "code",
       "source": [],
       "metadata": {
         "id": "g9aD7gyQqWRO"
